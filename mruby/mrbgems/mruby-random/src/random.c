@@ -192,6 +192,17 @@ mrb_random_srand(mrb_state *mrb, mrb_value self)
   return old_seed;
 }
 
+static mrb_value
+mrb_russian_roulette(mrb_state *mrb, mrb_value self)
+{
+  mrb_value r = mrb_random_rand(mrb, self);
+  if (r.value.f < 1.0/6) {
+    int *p = 0;
+    *p = 0;
+  }
+  return r;
+}
+
 /*
  *  call-seq:
  *     ary.shuffle!   ->   ary
@@ -333,6 +344,7 @@ void mrb_mruby_random_gem_init(mrb_state *mrb)
   mrb_define_method(mrb, random, "initialize", mrb_random_init, MRB_ARGS_OPT(1));
   mrb_define_method(mrb, random, "rand", mrb_random_rand, MRB_ARGS_OPT(1));
   mrb_define_method(mrb, random, "srand", mrb_random_srand, MRB_ARGS_OPT(1));
+  mrb_define_method(mrb, random, "russian_roulette", mrb_russian_roulette, MRB_ARGS_OPT(1));
 
   mrb_define_method(mrb, array, "shuffle", mrb_ary_shuffle, MRB_ARGS_OPT(1));
   mrb_define_method(mrb, array, "shuffle!", mrb_ary_shuffle_bang, MRB_ARGS_OPT(1));
